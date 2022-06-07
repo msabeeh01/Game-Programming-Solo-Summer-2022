@@ -11,6 +11,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform groundCheckPos;
     [SerializeField] private LayerMask whatIsGround;
 
+
+    private bool red = true;
+    private bool blue;
+    private bool yellow;
+    private bool nothing;
+
+
     private Rigidbody2D rBody;
     private bool isGrounded = false;
 
@@ -18,18 +25,29 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rBody = GetComponent<Rigidbody2D>();
+        Debug.Log(red);
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Update Time" + Time.deltaTime);
+        //ColorCheck();
+        //Debug.Log(colors[0]);
+        GameObject[] otherObjects = GameObject.FindGameObjectsWithTag("red");
+        
+        //if anything else but red, ignore collision
+        if(red == false){
+            foreach (GameObject obj in otherObjects) {
+            Physics2D.IgnoreCollision(obj.GetComponent<Collider2D>(), GetComponent<Collider2D>()); 
+            }
+        }
     }
 
+    void ColorCheck(){
+    }
 
     //For Physics
     private void FixedUpdate() {
-        Debug.Log("Fixed Update Time" + Time.deltaTime);
 
         float horiz = Input.GetAxis("Horizontal");
         isGrounded = GroundCheck();
@@ -49,4 +67,23 @@ public class PlayerController : MonoBehaviour
         //creates a circle which uses given funcitons to check if grounded
         return Physics2D.OverlapCircle(groundCheckPos.position, groundCheckRadius, whatIsGround);
     }
+
+    private void OnEnable() {
+
+        
+        
+
+        
+    }
+
+    private void OnCollisionEnter2D(Collision2D other) {
+        if (other.gameObject.tag == "changeRed")
+        {
+            //If the GameObject has the same tag as specified, output this message in the console
+            red = false;
+            blue = true;
+            Debug.Log(red);
+        }
+    }
+
 }
