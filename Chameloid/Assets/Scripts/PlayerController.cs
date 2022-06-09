@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
 
 
     private bool red;
-    private bool blue;
+    private bool blue = true;
     private bool yellow;
     private bool nothing;
 
@@ -37,8 +37,8 @@ public class PlayerController : MonoBehaviour
         GameObject[] blueObjects = GameObject.FindGameObjectsWithTag("blue");
         GameObject[] yellowObjects = GameObject.FindGameObjectsWithTag("yellow");
         
-        //if anything else but red, ignore collision
-        if(red == true){
+        //if not red, ignore collision
+        if(red == false){
             foreach (GameObject obj in redObjects) {
             Physics2D.IgnoreCollision(obj.GetComponent<Collider2D>(), GetComponent<Collider2D>(), true); 
             }
@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if(blue == true){
+        if(blue == false){
             foreach (GameObject obj in blueObjects) {
             Physics2D.IgnoreCollision(obj.GetComponent<Collider2D>(), GetComponent<Collider2D>(), true); 
             }
