@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask whatIsGround;
 
 
-    private bool red = true;
+    private bool red;
     private bool blue;
     private bool yellow;
     private bool nothing;
@@ -33,18 +33,47 @@ public class PlayerController : MonoBehaviour
     {
         //ColorCheck();
         //Debug.Log(colors[0]);
-        GameObject[] otherObjects = GameObject.FindGameObjectsWithTag("red");
+        GameObject[] redObjects = GameObject.FindGameObjectsWithTag("red");
+        GameObject[] blueObjects = GameObject.FindGameObjectsWithTag("blue");
+        GameObject[] yellowObjects = GameObject.FindGameObjectsWithTag("yellow");
         
         //if anything else but red, ignore collision
-        if(red == false){
-            foreach (GameObject obj in otherObjects) {
-            Physics2D.IgnoreCollision(obj.GetComponent<Collider2D>(), GetComponent<Collider2D>()); 
+        if(red == true){
+            foreach (GameObject obj in redObjects) {
+            Physics2D.IgnoreCollision(obj.GetComponent<Collider2D>(), GetComponent<Collider2D>(), true); 
+            }
+        }
+        else{
+            foreach (GameObject obj in redObjects) {
+            Physics2D.IgnoreCollision(obj.GetComponent<Collider2D>(), GetComponent<Collider2D>(), false); 
+            }
+        }
+
+        if(blue == true){
+            foreach (GameObject obj in blueObjects) {
+            Physics2D.IgnoreCollision(obj.GetComponent<Collider2D>(), GetComponent<Collider2D>(), true); 
+            }
+        }
+        else{
+            foreach (GameObject obj in blueObjects) {
+            Physics2D.IgnoreCollision(obj.GetComponent<Collider2D>(), GetComponent<Collider2D>(), false); 
             }
         }
     }
 
-    void ColorCheck(){
+
+    void ChangeRed(){
+        red = true;
+        blue = false;
+        yellow = false;
     }
+
+    void ChangeBlue(){
+        red = false;
+        blue = true;
+        yellow = false;
+    }
+
 
     //For Physics
     private void FixedUpdate() {
@@ -68,22 +97,27 @@ public class PlayerController : MonoBehaviour
         return Physics2D.OverlapCircle(groundCheckPos.position, groundCheckRadius, whatIsGround);
     }
 
-    private void OnEnable() {
-
-        
-        
-
-        
-    }
-
     private void OnCollisionEnter2D(Collision2D other) {
         if (other.gameObject.tag == "changeRed")
         {
             //If the GameObject has the same tag as specified, output this message in the console
-            red = false;
-            blue = true;
+            red = true;
+            yellow = false;
+            blue=false;
             Debug.Log(red);
         }
+
+        if (other.gameObject.tag == "changeBlue")
+        {
+            //If the GameObject has the same tag as specified, output this message in the console
+            red = false;
+            yellow = false;
+            blue = true;
+            Debug.Log("colour isa now blue");
+            Debug.Log(red);
+        }
+
+        
     }
 
 }
