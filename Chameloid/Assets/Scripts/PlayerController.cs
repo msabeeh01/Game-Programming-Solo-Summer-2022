@@ -68,15 +68,26 @@ public class PlayerController : MonoBehaviour
         GameObject[] blueObjects = GameObject.FindGameObjectsWithTag("blue");
         GameObject[] redObjects = GameObject.FindGameObjectsWithTag("red");
         GameObject[] yellowObjects = GameObject.FindGameObjectsWithTag("yellow");
+
+        GameObject[] redDeathObjects = GameObject.FindGameObjectsWithTag("redDeath");
         
         //if not red, ignore collision
         if(red == false){
             foreach (GameObject obj in redObjects) {
             Physics2D.IgnoreCollision(obj.GetComponent<Collider2D>(), GetComponent<Collider2D>(), true); 
             }
+
+            foreach (GameObject obj in redDeathObjects) {
+            Physics2D.IgnoreCollision(obj.GetComponent<Collider2D>(), GetComponent<Collider2D>(), true); 
+            }
+
         }
         else{
             foreach (GameObject obj in redObjects) {
+            Physics2D.IgnoreCollision(obj.GetComponent<Collider2D>(), GetComponent<Collider2D>(), false); 
+            }
+
+            foreach (GameObject obj in redDeathObjects) {
             Physics2D.IgnoreCollision(obj.GetComponent<Collider2D>(), GetComponent<Collider2D>(), false); 
             }
         }
@@ -183,14 +194,14 @@ public class PlayerController : MonoBehaviour
         if (blue == true && other.gameObject.tag == "blueDeath")
         {
             //If the GameObject has the same tag as specified, output this message in the console
-            transform.position = startPos;
+            SceneManager.LoadScene("SampleScene");
             Debug.Log("you died!");
         }
 
         if (yellow == true && other.gameObject.tag == "yellowDeath")
         {
             //If the GameObject has the same tag as specified, output this message in the console
-            transform.position = startPos;
+            SceneManager.LoadScene("SampleScene");
             Debug.Log("you died!");
         }
         
