@@ -38,7 +38,6 @@ public class LayerChanger : MonoBehaviour
         findColour();
         if(Player.currentColour == myColour){
             this.gameObject.layer = 6;
-            Debug.Log("touchable jump");
         }
         else{
             this.gameObject.layer = 0;

@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float speed = 10.0f;
     [SerializeField] private float jumpForce = 10.0f;
 
+    [SerializeField] private Canvas winCanvas;
     private BoxCollider2D boxCollider2d;
 
     private bool red = true;
@@ -29,6 +30,7 @@ public class PlayerController : MonoBehaviour
     private void Awake() {
         rBody = GetComponent<Rigidbody2D>();
         boxCollider2d = transform.GetComponent<BoxCollider2D>();
+        winCanvas.gameObject.SetActive(false);
     }
 
     // Start is called before the first frame update
@@ -59,6 +61,10 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float horiz = Input.GetAxis("Horizontal");
+        //change horiz axis by speed
+        rBody.velocity = new Vector2(horiz * speed, rBody.velocity.y);
+
         playerColor();
         if(GroundCheck() && Input.GetKeyDown(KeyCode.Space)){
             rBody.velocity = Vector2.up * jumpForce;
@@ -70,8 +76,10 @@ public class PlayerController : MonoBehaviour
         GameObject[] yellowObjects = GameObject.FindGameObjectsWithTag("yellow");
 
         GameObject[] redDeathObjects = GameObject.FindGameObjectsWithTag("redDeath");
+        GameObject[] blueDeathObjects = GameObject.FindGameObjectsWithTag("blueDeath");
         
         //if not red, ignore collision
+
         if(red == false){
             foreach (GameObject obj in redObjects) {
             Physics2D.IgnoreCollision(obj.GetComponent<Collider2D>(), GetComponent<Collider2D>(), true); 
@@ -96,9 +104,16 @@ public class PlayerController : MonoBehaviour
             foreach (GameObject obj in blueObjects) {
             Physics2D.IgnoreCollision(obj.GetComponent<Collider2D>(), GetComponent<Collider2D>(), true); 
             }
+
+            foreach (GameObject obj in blueDeathObjects) {
+            Physics2D.IgnoreCollision(obj.GetComponent<Collider2D>(), GetComponent<Collider2D>(), true); 
+            }
         }
         else{
             foreach (GameObject obj in blueObjects) {
+            Physics2D.IgnoreCollision(obj.GetComponent<Collider2D>(), GetComponent<Collider2D>(), false); 
+            }
+            foreach (GameObject obj in blueDeathObjects) {
             Physics2D.IgnoreCollision(obj.GetComponent<Collider2D>(), GetComponent<Collider2D>(), false); 
             }
         }
@@ -136,9 +151,7 @@ public class PlayerController : MonoBehaviour
     }
     //For Physics
     private void FixedUpdate() {
-        float horiz = Input.GetAxis("Horizontal");
-        //change horiz axis by speed
-        rBody.velocity = new Vector2(horiz * speed, rBody.velocity.y);
+
     }
 
     //Player Ground Check
@@ -157,13 +170,20 @@ public class PlayerController : MonoBehaviour
         return raycastHit.collider != null;
     }
 
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(other.gameObject.tag == "green"){
+            Debug.Log("Yon Won!!!");
+            winCanvas.gameObject.SetActive(true);
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D other) {
 
         if (other.gameObject.tag == "changeRed")
         {
             //If the GameObject has the same tag as specified, output this message in the console
             ChangeRed();
-            m_SpriteRenderer.color = Color.red;
+            playerColor();
             Debug.Log("colour is now red");
             
         }
@@ -180,7 +200,7 @@ public class PlayerController : MonoBehaviour
         {
             //If the GameObject has the same tag as specified, output this message in the console
             ChangeYellow();
-            m_SpriteRenderer.color = Color.yellow;
+            playerColor();
             Debug.Log("colour is now yellow");
         }
 

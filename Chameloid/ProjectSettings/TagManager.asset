@@ -11,6 +11,7 @@ TagManager:
   - changeBlue
   - redDeath
   - blueDeath
+  - green
   layers:
   - Default
   - TransparentFX
