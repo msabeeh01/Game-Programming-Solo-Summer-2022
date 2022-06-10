@@ -27,6 +27,23 @@ public class CameraControllerBuffer : MonoBehaviour
                 transform.position.z
             );
         }
+
+        if(player.position.y < transform.position.y - (0.5f * cameraOffsetY)) //Left
+        {
+            transform.position = new Vector3(
+                transform.position.x,
+                player.position.y + ( 0.5f * cameraOffsetY),
+                transform.position.z
+            );
+        }
+        else if(player.position.y > transform.position.y + (0.5f * cameraOffsetY))
+        {
+            transform.position = new Vector3(
+                transform.position.x,
+                player.position.y - ( 0.5f * cameraOffsetY),
+                transform.position.z
+            );
+        }
     }
 
     private void OnDrawGizmos() {

@@ -9,6 +9,8 @@ TagManager:
   - blue
   - changeRed
   - changeBlue
+  - redDeath
+  - blueDeath
   layers:
   - Default
   - TransparentFX
